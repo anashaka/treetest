@@ -32,6 +32,7 @@ hs_err_pid*
 /gradle/wrapper
 gradlew
 gradlew.bat
+gradle.properties
 # Created by .ignore support plugin (hsz.mobi)
 # IntelliJ project files
 build

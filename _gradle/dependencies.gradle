@@ -1,0 +1,61 @@
+import groovy.json.JsonOutput
+
+class Module {
+    String name
+    String path
+    String projectDir
+    String group
+    String version
+    Set<String> dependencies
+}
+
+class Repository {
+    String repositoryUrl;
+    String branch;
+    Collection<Module> modules;
+
+
+}
+
+task describe {
+    doLast {
+        def repoInfo = new Repository()
+        repoInfo.branch = getBranch()
+        repoInfo.repositoryUrl = getRepository()
+        repoInfo.modules = modulesInfo()
+        println JsonOutput.toJson(repoInfo)
+    }
+}
+
+Collection<Module> modulesInfo() {
+    allprojects.collect { p ->
+        def module = new Module()
+        module.name = p.name
+        module.path = p.path
+        module.group = p.group
+        module.version = p.version
+        module.projectDir = p.rootProject.projectDir.toPath().relativize(p.projectDir.toPath())
+        module.dependencies = p.configurations.collectMany({ it.allDependencies }).findAll({
+            it instanceof ProjectDependency
+        }).collect({ it.getDependencyProject().getPath() })
+        return module
+    } as Collection<Module>
+}
+
+String getBranch() {
+    return runCmdAsString("git rev-parse --abbrev-ref HEAD")
+}
+
+String getRepository() {
+    return runCmdAsString("git config --get remote.origin.url")
+}
+
+static String runCmdAsString(String cmd) {
+    def result = null
+    def proc = cmd.execute()
+    proc.in.eachLine { line -> result = line }
+      proc.err.eachLine { line -> throw new GradleException("Error: ${line}") }
+    proc.waitFor()
+    result
+}
+

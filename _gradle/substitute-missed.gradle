@@ -1,0 +1,20 @@
+import org.gradle.internal.component.local.model.DefaultProjectComponentSelector
+import org.gradle.internal.component.external.model.DefaultModuleComponentSelector
+
+apply plugin: ExternalProjectDependenciesPlugin
+
+class ExternalProjectDependenciesPlugin implements Plugin<Gradle> {
+
+    void apply(Gradle gradle) {
+
+        gradle.allprojects {
+            configurations.all {
+                resolutionStrategy.dependencySubstitution.all { DependencySubstitution dependency ->
+                    if (dependency.requested instanceof DefaultProjectComponentSelector && project.path != dependency.requested.projectPath) {
+                        dependency.useTarget "com.testtree${dependency.requested.projectPath}:0.0.0"
+                    }
+                }
+            }
+        }
+    }
+}
