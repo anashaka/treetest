@@ -6,7 +6,6 @@
  * user guide available at https://docs.gradle.org/3.3/userguide/tutorial_java_projects.html
  */
 
-// Apply the java plugin to add support for Java
 apply plugin: 'java'
 
 // Apply the application plugin to add support for building an application
@@ -24,17 +23,13 @@ repositories {
 
 dependencies {
     compile project(':a')
-    // The production code uses Guava
     compile 'com.google.guava:guava:20.0'
 
-    // Use the latest Groovy version for Spock testing
     testCompile 'org.codehaus.groovy:groovy-all:2.4.7'
 
-    // Use the awesome Spock testing and specification framework even with Java
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     testCompile 'junit:junit:4.12'
 }
 
-// Define the main class for the application
 mainClassName = 'App'
 
