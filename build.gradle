@@ -5,7 +5,11 @@ task wrapper(type: Wrapper) {
 }
 
 
-subprojects {
+def javaProjects() {
+    return subprojects.findAll { new File(it.projectDir, "src").exists() }
+}
+
+configure(javaProjects()) {
     apply plugin: 'maven-publish'
     group = "com.testtree"
     version = "0.0.0"
