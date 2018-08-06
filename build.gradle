@@ -1,4 +1,23 @@
+import org.gradle.internal.component.local.model.DefaultProjectComponentSelector
+plugins {
+    id "org.sonarqube" version "2.6.2"
+}
+
+
 apply from: "${rootDir}/_gradle/dependencies.gradle"
+
+
+sonarqube {
+    properties {
+        property "sonar.links.homepage", linkHomepage
+        property "sonar.links.ci", linkCi
+        property "sonar.links.issue", linkIssue
+        property "sonar.links.scm", linkScmUrl
+        property "sonar.links.scm_dev", linkScmDevConnection
+        property "sonar.exclusions", "**/generated-src/**.java,**/build/generated/source/**"
+    }
+}
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.4.1'
@@ -9,10 +28,30 @@ def javaProjects() {
     return subprojects.findAll { new File(it.projectDir, "src").exists() }
 }
 
+
+allprojects {
+    configurations.all {
+        resolutionStrategy.dependencySubstitution.all { DependencySubstitution dependency ->
+            if (dependency.requested instanceof DefaultProjectComponentSelector && project.path != dependency.requested.projectPath) {
+                dependency.useTarget "com.testtree${dependency.requested.projectPath}:0.0.0"
+            }
+        }
+    }
+}
+
+def projectOrDependency(projectPath) {
+    if (findProject(projectPath) != null) {
+        project(projectPath)
+    } else {
+        "com.testtree${projectPath}:0.0.0"
+    }
+}
+
 configure(javaProjects()) {
+    apply plugin: "jacoco"
     apply plugin: 'maven-publish'
     group = "com.testtree"
-    version = "0.0.0"
+    version = "0.0.1-SNAPSHOT"
 
 
     repositories {

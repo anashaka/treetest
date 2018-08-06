@@ -23,8 +23,8 @@ repositories {
 }
 
 dependencies {
-    compile project(':d')
-    compile project(':e')
+    compile projectOrDependency(':d')
+    compile projectOrDependency(':e')
     // The production code uses Guava
     compile 'com.google.guava:guava:20.0'
 

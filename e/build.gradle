@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':a')
+    compile projectOrDependency(':a')
     compile 'com.google.guava:guava:20.0'
 
     testCompile 'org.codehaus.groovy:groovy-all:2.4.7'

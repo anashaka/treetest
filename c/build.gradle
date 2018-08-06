@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     // The production code uses Guava
-    compile project(':b')
+    compile projectOrDependency(':b')
     compile 'com.google.guava:guava:20.0'
 
     // Use the latest Groovy version for Spock testing

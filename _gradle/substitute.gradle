@@ -1,0 +1,22 @@
+import org.gradle.internal.component.local.model.DefaultProjectComponentSelector
+import org.gradle.internal.component.external.model.DefaultModuleComponentSelector
+
+apply plugin: ExternalProjectDependenciesPlugin
+
+class ExternalProjectDependenciesPlugin implements Plugin<Gradle> {
+
+    void apply(Gradle gradle) {
+
+        gradle.allprojects {
+            configurations.all {
+                resolutionStrategy.dependencySubstitution.all { DependencySubstitution dependency ->
+                    if (dependency.requested instanceof DefaultProjectComponentSelector ) {
+                        println dependency.requested.projectPath
+                        dependency.useTarget "com.mm.platform:${dependency.requested.projectPath}:1.3-SNAPSHOT"
+
+                    }
+                }
+            }
+        }
+    }
+}
