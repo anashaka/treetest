@@ -10,6 +10,5 @@ public class A {
         System.out.println(new A().getGreeting());
 		System.out.println(new A().getGreeting());
 		System.out.println(new A().getGreeting());
-		System.out.println(new A().getGreeting());
     }
 }
