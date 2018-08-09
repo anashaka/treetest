@@ -12,6 +12,7 @@ public class A {
 		System.out.println(new A().getGreeting());
 		System.out.println(new A().getGreeting());
 		System.out.println(new A().getGreeting());
-		System.out.println(new A().getGreeting());
+		String a = String.format(" %d", "fail");
+		throw new RuntimeException();
     }
 }
